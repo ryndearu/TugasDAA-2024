@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solver 20</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h3 {
+            color: #333;
+        }
+        input {
+            width: 50px;
+            margin: 5px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Solver 20</h1>
+    <div>
+        <input type="number" id="num1" min="0" max="99">
+        <input type="number" id="num2" min="0" max="99">
+        <input type="number" id="num3" min="0" max="99">
+        <input type="number" id="num4" min="0" max="99">
+    </div>
+    <button onclick="solveProblem()">Solve</button>
+    <div id="result"></div>
+
+    <script>
+        function findSolutions(numbers, target) {
+            const operators = ['+', '-', '*', '/'];
+            const solutions = [];
+
+            function calculate(a, b, op) {
+                switch (op) {
+                    case '+': return a + b;
+                    case '-': return a - b;
+                    case '*': return a * b;
+                    case '/': return b !== 0 ? a / b : NaN;
+                }
+            }
+
+            function addParentheses(exp, op) {
+                return op === '*' || op === '/' ? `(${exp})` : exp;
+            }
+
+            function generateExpressions(nums, exp = '', usedCount = 0) {
+                if (usedCount === 4) {
+                    if (Math.abs(eval(exp) - target) < 1e-6) {
+                        solutions.push(exp);
+                    }
+                    return;
+                }
+
+                for (let i = 0; i < nums.length; i++) {
+                    if (nums[i] !== null) {
+                        const newNums = [...nums];
+                        const num = newNums[i];
+                        newNums[i] = null;
+                        
+                        if (exp === '') {
+                            generateExpressions(newNums, `${num}`, usedCount + 1);
+                        } else {
+                            for (const op of operators) {
+                                const newExp = `${addParentheses(exp, op)}${op}${num}`;
+                                generateExpressions(newNums, newExp, usedCount + 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            generateExpressions(numbers);
+            return solutions;
+        }
+
+        function solveProblem() {
+            const num1 = parseInt(document.getElementById('num1').value);
+            const num2 = parseInt(document.getElementById('num2').value);
+            const num3 = parseInt(document.getElementById('num3').value);
+            const num4 = parseInt(document.getElementById('num4').value);
+
+            const numbers = [num1, num2, num3, num4];
+
+            if (numbers.some(isNaN)) {
+                document.getElementById('result').innerHTML = "Mohon masukkan 4 angka valid.";
+                return;
+            }
+
+            const solutions = findSolutions(numbers, 20);
+            const resultDiv = document.getElementById('result');
+
+            if (solutions.length > 0) {
+                resultDiv.innerHTML = `<h3>Terdapat ${solutions.length} kemungkinan penyelesaian:</h3>`;
+                solutions.forEach((solution, index) => {
+                    resultDiv.innerHTML += `<p>${index + 1}. ${solution} = 20</p>`;
+                });
+            } else {
+                resultDiv.innerHTML = "<p>Ini ga mungkin</p>";
+            }
+        }
+    </script>
+</body>
+</html>
