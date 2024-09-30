@@ -1,6 +1,6 @@
 # Tugas Desain Analisis Algoritma
 Nama Kelompok: <br/>
-Muhammad Irfan Dhia Ulhaq (L0123078) <br/> 
+M. Irfan Dhia Ulhaq (L0123078) <br/> 
 Muhammad Febrian Jamaludin (L0123094)
 
 Tugas Desain Analisis Algoritma <br/> 
